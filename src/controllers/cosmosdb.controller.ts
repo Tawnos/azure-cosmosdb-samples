@@ -37,7 +37,13 @@ export class CosmosDbController {
       const container: Container = database.container(containerId)
 
       const querySpec = {
-        query: `SELECT * FROM Items WHERE Items.id = "${req.query.id}"`
+        query: "SELECT * FROM Items WHERE Items.id = @itemId",
+        parameters: [
+          {
+            name: "@itemId",
+            value: `${req.query.id}`
+          }
+        ]
       }
       const { resources: items } = await container.items
         .query(querySpec)
